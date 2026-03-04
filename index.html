@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="da">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"/>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#E60028">
+    <title>ROCKWOOL - Varm ende checklister</title>
+    <style>
+        :root {
+            --rock-red: #E60028;
+            --bg-page: #f2f4f6;
+            --bg-card: #ffffff;
+            --text-main: #1a1a1a;
+            --text-muted: #666666;
+            --border: #d1d5db;
+            --input-bg: #f9fafb;
+            --bar-bg: #e2e8f0;
+            --radius: 12px;
+            --btn-radius: 50px;
+        }
+
+        body.dark-mode {
+            --bg-page: #0f111a;
+            --bg-card: #1a1c26;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: #334155;
+            --input-bg: #1a1c26;
+            --bar-bg: #334155;
+        }
+
+        body { 
+            margin: 0; padding: 0; font-family: "Segoe UI", sans-serif; 
+            background-color: var(--bg-page); color: var(--text-main);
+            display: flex; flex-direction: column; min-height: 100vh;
+        }
+
+        header { 
+            background: var(--rock-red); padding: 0 20px; 
+            display: flex; justify-content: space-between; align-items: center;
+            height: 60px; color: white; flex-shrink: 0;
+        }
+
+        .header-logo { font-weight: 900; font-size: 18px; letter-spacing: 1px; }
+        
+        .btn-menu { 
+            background: rgba(255,255,255,0.2); border: 1px solid white; 
+            color: white; padding: 6px 16px; border-radius: var(--btn-radius);
+            cursor: pointer; font-weight: 700;
+        }
+
+        .app-container { max-width: 650px; margin: 20px auto; width: 95%; flex: 1; }
+
+        .status-card {
+            background: var(--bg-card); padding: 20px;
+            border-radius: var(--radius); margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .status-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .status-text { font-weight: 900; color: var(--rock-red); font-size: 16px; }
+
+        .btn-dev-small {
+            background: none; border: 2px solid var(--rock-red); color: var(--rock-red);
+            padding: 6px 15px; font-size: 12px; font-weight: 800;
+            border-radius: var(--btn-radius); cursor: pointer;
+        }
+        .btn-dev-small.active { background: var(--rock-red); color: white; }
+
+        .progress-bar { width: 100%; height: 12px; background: var(--bar-bg); border-radius: 10px; overflow: hidden; }
+        .progress-fill { width: 0%; height: 100%; background: var(--rock-red); transition: width 0.4s ease; }
+
+        .list-card { background: var(--bg-card); border-radius: var(--radius); overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .item { display: flex; align-items: center; padding: 18px 20px; border-bottom: 1px solid var(--border); background: var(--bg-card); cursor: pointer; }
+        .item.heading { background: var(--bg-page); color: var(--rock-red); font-weight: 900; font-size: 13px; cursor: default; }
+        .check-box { width: 26px; height: 26px; border: 2px solid var(--border); margin-right: 18px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .item.done .check-box { background: #3182ce; border-color: #3182ce; color: white; }
+
+        .modal { display:none; position:fixed; z-index:9999; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.85); backdrop-filter: blur(4px); }
+        .modal-content { 
+            background: var(--bg-card); color: var(--text-main);
+            margin: 15% auto; padding: 30px; width: 85%; max-width: 400px; 
+            border-radius: var(--radius); border-top: 6px solid var(--rock-red); text-align: center;
+        }
+
+        .modal-content textarea, .modal-content input {
+            border: 2px solid #94a3b8 !important;
+            background-color: var(--input-bg) !important;
+            color: var(--text-main) !important;
+        }
+
+        .btn-red { background: var(--rock-red); color: white; border: none; padding: 16px; width: 100%; border-radius: var(--btn-radius); font-weight: 800; cursor: pointer; font-size: 16px; }
+        .btn-red:disabled { background: #555; cursor: not-allowed; opacity: 0.5; }
+        .btn-secondary { width:100%; background:none; border:none; margin-top:20px; color:var(--text-muted); font-weight:800; cursor:pointer; text-transform: uppercase; }
+
+        input, select, textarea { width: 100%; padding: 14px; margin: 10px 0 20px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main); font-size: 16px; box-sizing: border-box; }
+
+        #menuContent { display:none; position:absolute; top:65px; left:20px; background:var(--bg-card); border:1px solid var(--border); border-radius:12px; z-index:2000; min-width: 220px; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .menu-item { width:100%; padding:15px 20px; border:none; background:none; text-align:left; color:var(--text-main); font-weight:700; cursor:pointer; border-bottom:1px solid var(--border); display: flex; align-items: center; gap: 10px; }
+        
+        footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 12px; font-weight: 600; }
+    </style>
+</head>
+<body class="dark-mode">
+
+<header>
+    <button onclick="toggleMenu()" class="btn-menu">MENU ▾</button>
+    <div class="header-logo">ROCKWOOL</div>
+</header>
+
+<div id="menuContent">
+    <button onclick="location.reload()" class="menu-item">🏠 Forside</button>
+    <button onclick="document.body.classList.toggle('dark-mode'); toggleMenu();" class="menu-item">🌓 Skift Tema</button>
+    <button onclick="openAdminModal()" class="menu-item">⚙️ Indstillinger 🔒</button>
+</div>
+
+<main class="app-container">
+    <section id="page-home">
+        <div class="status-card" style="text-align: center;">
+            <h1 style="margin-top:0; font-size:24px; font-weight:900; text-transform:uppercase; border-bottom:4px solid var(--rock-red); display:inline-block; padding-bottom: 5px;">Checklister</h1>
+            <label style="display:block; margin-top:30px; text-align: left; font-weight: 700;">Vælg Tjekliste</label>
+            <select id="selList">
+                <option>Aquila opstart - Spinder passer</option>
+                <option>Opstartsliste Kældermand Aquila L5</option>
+                <option>Kældermand rundgang</option>
+            </select>
+            <label style="display:block; text-align: left; font-weight: 700;">Arbejdsnummer (5 cifre)</label>
+            <input type="text" id="workNr" placeholder="F.eks. 12345" maxlength="5">
+            <button class="btn-red" onclick="startApp()">Begynd nu →</button>
+        </div>
+    </section>
+
+    <section id="page-list" style="display:none;">
+        <div class="status-card">
+            <div class="status-row">
+                <div id="status-text" class="status-text">0 / 0 UDFØRT</div>
+                <button id="btnDev" class="btn-dev-small" onclick="toggleDevMode()">⚠️ MELD AFVIGELSE</button>
+            </div>
+            <div class="progress-bar"><div id="progress-fill" class="progress-fill"></div></div>
+        </div>
+
+        <div class="list-card">
+            <div id="activeItems"></div>
+            <details>
+                <summary id="doneLabel" style="padding:15px; font-weight:800; cursor:pointer; color:var(--text-muted); font-size: 12px; text-transform: uppercase;">Udførte punkter (0)</summary>
+                <div id="doneItems"></div>
+            </details>
+        </div>
+
+        <div style="margin-top:30px;">
+            <label style="font-weight:800; font-size: 13px; color: var(--text-muted); text-transform: uppercase;">Bemærkninger</label>
+            <textarea id="notes" rows="4" placeholder="Tilføj eventuelle kommentarer..."></textarea>
+            <button id="sendBtn" class="btn-red" onclick="sendFinalReport()" disabled>Udfør & Send Rapport</button>
+        </div>
+    </section>
+</main>
+
+<footer>App lavet af Lasse Gamborg</footer>
+
+<div id="customModal" class="modal"><div class="modal-content" id="modal-body"></div></div>
+
+<script>
+    // PWA Registrering
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js').catch(err => console.log("SW fejl:", err));
+    }
+
+    const checklists = {
+        "Aquila opstart - Spinder passer": ["Indledende:", "Drej nøgle til Energen til Manuel", "Gennemgå alarmlisten", "Start kølevandssystemet i Group mode (billede 2201)", "Åben gas/ilt haner i Aquila kølerum og ved gas rampen", "Opstart anlæg:", "Vælg Group mode på alle sektioner på 2100", "Vælg Start på alle undtagen uld affald", "Tjek at blæsere/ventiler står i Auto (2100)", "Tjek opstartssekvens Step 0 er grøn (2109)", "Sætpunkt opvarmning før skorsten 130c (2106)", "Tjek Drift tilstand & Kølesystem klar (2201)", "Nulstil spædevandstællere (2201)", "Kontrol flow (Venturi:60, Top:15, Ring:45, Konus:70, Bund:100, Centralrør:60)", "Billede 2109: Vælg opvarmning", "Tjek Oxyfuel status (3001)", "Filter (2104): Start alle i Group mode", "Tjek startbetingelser step 5 (Lufo ok)", "Step 30: Udluft cykloner (2901)", "Billede 133: Tjek linesafety", "Tjek tryk på røggas køler", "AQ Chargering (2001): Group mode + Start", "Weighing: Start (Fyld sten i stenkassen)", "ACON 00500: Start tromle 1, uldløfter, blæser, forspaltevalse", "Start Cooling Water (2207)", "Tjek kammerdøre og start kammersugere", "Start indvendig tromlerens", "Afprøv omløb og snabelbakke", "Start spinder og luftringsblæser", "Bindemiddel: Dræn første væske fra buffertank 1274", "Tjek affaldsanlæg Area 1, 2, 3 og stangmølle", "Start Filter fines og Alu dosering (2136)", "Oxyfuel: Tænd 3.1 & 3.2 ved 70°C på TT4", "Step 45: Opvarmning OK (130°C ved skorsten)", "Step 71: Start Bu 23 (500Kw)", "Step 72: Start Bu 3.3 og 3.4 (300Kw)", "Step 90: Start Bu 21+22 (500Kw)", "Smeltestart:", "Start DrySoTec (2135)", "Indvælg Raw material 6 t/h", "Indstil Kw: Bu 3.1-3.4(900), 21-22(1500), 23(1800)", "Start Waste MP1 og MP2 (1 t/h hver)", "Frigiv Bu 3.3 og Returuld ved 850°C (TT 9+10)", "Fyld spinderen (billede 600)", "Manuel temperaturmåling og justering"],
+        "Opstartsliste Kældermand Aquila L5": ["Rundering:", "Inspicer Smeltecyklon + Cyklon 1 + 2 (Tjek for folk)", "Luk lågen på cykloner 1 og 2", "Luk taphul med ler-prop + sifon åben", "Kontrol:", "Tappelanser klargjort", "Køling af sifon og bakker åbnet", "Luft/Ammoniak ventiler åbne", "Låge til stensilo og cykloner lukket", "Leslaw hul rengjort", "Skift dyser til tromlerens og kammerkøling", "Spinder:", "Monter blæserør, lås i gulv", "Monter stik og multi-stik på spinder", "Åben ventil SK2 Kølekappe", "Tjek tromleblæser-lanser rene/på plads", "Systemtjek:", "Start procesvandspumpe + rens filter", "Tjek luft til bobbelrør på BM buffertank", "Tjek haner under BM-tank åbne", "Skyl bindemiddel indtil friskt grønt BM fremme", "Luk bundhane og udluftning på filter", "Tjek halv varmt klapspjæld kører frit", "Åben fluidicerings-luft i penthouse", "Åben luft til varm splashbox", "Efter start:", "Hjælp smelte ud", "Runder alle etager i ovnbygning", "Tjek klapspjæld arbejder rigtigt"],
+        "Kældermand rundgang": ["Tromlerens:", "1. Dyser korrekt + uld fjernet", "2. Reversering over tromlen OK", "3. Spyd til afblæsere rene", "4. Flow på afblæsere OK", "5. Rens forspaltevalse + skråplade", "6. Tromlerens pumper kører korrekt", "Tør – og Vådkælder:", "7. Vandsnegle + drænrist fri for opbygning", "8. Ingen åbne slanger eller vandspild", "9. Kælderbrønde niveau + pumper OK", "10. Cellesluser for recycling tætte", "11. Vibrationer og røg OK", "Pumperum:", "12. Filtre dagtank OK", "13. Pumper drift + tæthed OK", "Chargeringsbygning:", "14. Skippen fri for opbygning", "15. Skip grav ikke overfyldt", "16. Varme tændt (hvis frost)", "17. Båndomkast fri for opbygning", "18. Sider på vejebånd renset", "19. NaBi bigbag tjekket", "Bindemiddel bygning:", "20. Skylventil lukket + slange af", "21. Bindemiddel filtre skiftet", "Affaldsanlæg:", "22. Ingen bro-dannelse i kasseføder", "23. Følere i kassefødere korrekt", "24. Alle kasser tjekket", "25. Ingen uregelmæssigheder/spild", "Hjælpematerialer:", "26. Tjek antal tapstænger", "27. Tjek antal håndgranater", "Buffertank og BM rum:", "28. Luft til boblerør åben", "29. BM filter skiftet og udluftet", "Filter/Fordeler/Blæser-dæk:", "30. Tjek for røg, støj og støv", "31. Bånd centreret", "32. Tjek for utætheder", "33. Blæserdæk: Vibrationer OK", "34. Quench bakke fri for opbygning", "35. Leslau hul renset"]
+    };
+
+    let state = { current: "", items: [], checked: [], devs: {}, devMode: false, activeIdx: null };
+    const modal = document.getElementById('customModal');
+    const modalBody = document.getElementById('modal-body');
+
+    function vib(ms = 40) { if("vibrate" in navigator) navigator.vibrate(ms); }
+
+    function closeModal() { modal.style.display = 'none'; }
+    function toggleMenu() { vib(); const m = document.getElementById('menuContent'); m.style.display = (m.style.display === 'block') ? 'none' : 'block'; }
+    
+    function showGenericModal(title, text, callback) { 
+        modalBody.innerHTML = `<h2 style="color:var(--rock-red); margin-top:0;">${title}</h2><p>${text}</p><button class="btn-red" id="modalOk">OK</button>`; 
+        modal.style.display = 'block';
+        document.getElementById('modalOk').onclick = () => { vib(); closeModal(); if(callback) callback(); };
+    }
+
+    function openAdminModal() {
+        toggleMenu();
+        modalBody.innerHTML = `<h2 style="color:var(--rock-red);">ADMIN LOGIND</h2><p>Indtast kode:</p><input type="password" id="adminPwd"><button class="btn-red" onclick="checkAdmin()">Log ind</button><button class="btn-secondary" onclick="closeModal()">Annuller</button>`;
+        modal.style.display = 'block';
+    }
+
+    function checkAdmin() {
+        vib();
+        if(document.getElementById('adminPwd').value === "1234") {
+            const m1 = localStorage.getItem('rock_mail1') || '';
+            const m2 = localStorage.getItem('rock_mail2') || '';
+            modalBody.innerHTML = `<h2 style="color:var(--rock-red);">INDSTILLINGER</h2><label style="display:block;text-align:left;font-size:12px;">MODTAGER 1</label><input type="email" id="mail1" value="${m1}"><label style="display:block;text-align:left;font-size:12px;">MODTAGER 2</label><input type="email" id="mail2" value="${m2}"><button class="btn-red" onclick="saveSettings()">GEM</button><button class="btn-secondary" onclick="closeModal()">LUK</button>`;
+        } else { showGenericModal('Fejl', 'Forkert kode.'); }
+    }
+
+    function saveSettings() { vib(); localStorage.setItem('rock_mail1', document.getElementById('mail1').value); localStorage.setItem('rock_mail2', document.getElementById('mail2').value); closeModal(); }
+
+    function sendFinalReport() {
+        vib(100);
+        const m1 = localStorage.getItem('rock_mail1') || '';
+        const m2 = localStorage.getItem('rock_mail2') || '';
+        const workNr = document.getElementById('workNr').value;
+        const notes = document.getElementById('notes').value;
+
+        let reportText = `CHECKLISTE RAPPORT\n--------------------------\nType: ${state.current}\nArbejdsnr: ${workNr}\nDato: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\n\nPUNKTER:\n`;
+        state.items.forEach((text, i) => {
+            if(text.endsWith(':')) { reportText += `\n[ ${text.toUpperCase()} ]\n`; } 
+            else {
+                const status = state.checked.includes(i) ? "[X]" : "[ ]";
+                const dev = state.devs[i] ? `\n   ⚠️ AFVIGELSE: ${state.devs[i]}` : "";
+                reportText += `${status} ${text}${dev}\n`;
+            }
+        });
+
+        if(notes) reportText += `\n--------------------------\nBEMÆRKNINGER:\n${notes}\n`;
+        reportText += `\n--------------------------\nApp lavet af Lasse Gamborg`;
+
+        const recipients = [m1, m2].filter(m => m !== '').join(',');
+        const subject = encodeURIComponent(`Checkliste: ${state.current} - Arbejdsnr: ${workNr}`);
+        const body = encodeURIComponent(reportText);
+        
+        window.location.href = `mailto:${recipients}?subject=${subject}&body=${body}`;
+        
+        showGenericModal('AFSENDELSE', 'Rapporten er klargjort i din mail-app. Appen vender nu tilbage til forsiden.', () => {
+            location.reload();
+        });
+    }
+
+    function startApp() {
+        vib();
+        const nr = document.getElementById('workNr').value;
+        if(nr.length !== 5) return showGenericModal('Ugyldigt Nummer', 'Arbejdsnummeret skal være præcis 5 cifre.');
+        state.current = document.getElementById('selList').value;
+        state.items = checklists[state.current];
+        document.getElementById('page-home').style.display = 'none';
+        document.getElementById('page-list').style.display = 'block';
+        render();
+    }
+
+    function toggleDevMode() { vib(); state.devMode = !state.devMode; document.getElementById('btnDev').classList.toggle('active', state.devMode); }
+
+    function handleItemClick(i) {
+        if(state.items[i].endsWith(':')) return;
+        vib(30);
+        if(state.devMode) {
+            state.activeIdx = i;
+            modalBody.innerHTML = `<h2 style="color:var(--rock-red);">MELD AFVIGELSE</h2><p>Beskriv fejlen herunder:</p><textarea id="devInput" rows="4" placeholder="Skriv her..."></textarea><button class="btn-red" onclick="saveDev()">Gem Afvigelse</button><button class="btn-secondary" onclick="closeModal()">ANNULLER</button>`;
+            modal.style.display = 'block';
+            document.getElementById('devInput').focus();
+        } else {
+            if(state.checked.includes(i)) { state.checked = state.checked.filter(x => x !== i); delete state.devs[i]; }
+            else { state.checked.push(i); }
+            render();
+        }
+    }
+
+    function saveDev() {
+        vib();
+        const val = document.getElementById('devInput').value;
+        if(val) { 
+            const now = new Date();
+            const timeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
+            state.devs[state.activeIdx] = `(Kl. ${timeStr}) ${val}`;
+            if(!state.checked.includes(state.activeIdx)) state.checked.push(state.activeIdx); 
+        }
+        state.devMode = false;
+        document.getElementById('btnDev').classList.remove('active');
+        closeModal(); render();
+    }
+
+    function render() {
+        const activeBox = document.getElementById('activeItems'), doneBox = document.getElementById('doneItems');
+        activeBox.innerHTML = ''; doneBox.innerHTML = '';
+        
+        state.items.forEach((text, i) => {
+            const isHeading = text.endsWith(':'), isChecked = state.checked.includes(i), dev = state.devs[i], div = document.createElement('div');
+            div.className = isHeading ? 'item heading' : (isChecked ? 'item done' : 'item');
+            
+            if(!isHeading) {
+                div.onclick = () => handleItemClick(i);
+                div.innerHTML = `<div class="check-box" style="${dev?'background:var(--rock-red);border-color:var(--rock-red);':''}">${dev?'!':(isChecked?'✓':'')}</div><div style="flex:1"><div>${text}</div>${dev?'<small style="color:red;font-weight:bold;">⚠️ '+dev+'</small>':''}</div>`;
+                if(isChecked) doneBox.appendChild(div); else activeBox.appendChild(div);
+            } else {
+                let sectionDone = true;
+                for(let j=i+1; j<state.items.length; j++) {
+                    if(state.items[j].endsWith(':')) break;
+                    if(!state.checked.includes(j)) { sectionDone = false; break; }
+                }
+                div.innerText = text;
+                if(sectionDone) doneBox.appendChild(div); else activeBox.appendChild(div);
+            }
+        });
+        const total = state.items.filter(t => !t.endsWith(':')).length;
+        document.getElementById('status-text').innerText = `${state.checked.length} / ${total} UDFØRT`;
+        document.getElementById('progress-fill').style.width = (state.checked.length / total * 100) + '%';
+        document.getElementById('doneLabel').innerText = `Udførte punkter (${state.checked.length})`;
+        document.getElementById('sendBtn').disabled = (state.checked.length < total);
+    }
+</script>
+</body>
+</html>
