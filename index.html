@@ -84,12 +84,6 @@
             border-radius: var(--radius); border-top: 6px solid var(--rock-red); text-align: center;
         }
 
-        .modal-content textarea, .modal-content input {
-            border: 2px solid #94a3b8 !important;
-            background-color: var(--input-bg) !important;
-            color: var(--text-main) !important;
-        }
-
         .btn-red { background: var(--rock-red); color: white; border: none; padding: 16px; width: 100%; border-radius: var(--btn-radius); font-weight: 800; cursor: pointer; font-size: 16px; }
         .btn-red:disabled { background: #555; cursor: not-allowed; opacity: 0.5; }
         .btn-secondary { width:100%; background:none; border:none; margin-top:20px; color:var(--text-muted); font-weight:800; cursor:pointer; text-transform: uppercase; }
@@ -100,6 +94,15 @@
         .menu-item { width:100%; padding:15px 20px; border:none; background:none; text-align:left; color:var(--text-main); font-weight:700; cursor:pointer; border-bottom:1px solid var(--border); display: flex; align-items: center; gap: 10px; }
         
         footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 12px; font-weight: 600; }
+
+        /* Print-specifik CSS til rapportgenerering */
+        @media print {
+            header, footer, .btn-red, .btn-secondary, .btn-dev-small, #menuContent, .status-card, textarea, label, #page-home {
+                display: none !important;
+            }
+            body { background: white !important; color: black !important; }
+            .app-container { max-width: 100% !important; width: 100% !important; margin: 0 !important; }
+        }
     </style>
 </head>
 <body class="dark-mode">
@@ -152,7 +155,7 @@
         <div style="margin-top:30px;">
             <label style="font-weight:800; font-size: 13px; color: var(--text-muted); text-transform: uppercase;">Bemærkninger</label>
             <textarea id="notes" rows="4" placeholder="Tilføj eventuelle kommentarer..."></textarea>
-            <button id="sendBtn" class="btn-red" onclick="sendFinalReport()" disabled>Udfør & Send Rapport</button>
+            <button id="sendBtn" class="btn-red" onclick="sendFinalReport()" disabled>Udfør & Opret Rapport</button>
         </div>
     </section>
 </main>
@@ -162,7 +165,6 @@
 <div id="customModal" class="modal"><div class="modal-content" id="modal-body"></div></div>
 
 <script>
-    // PWA Registrering
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js').catch(err => console.log("SW fejl:", err));
     }
@@ -171,50 +173,7 @@
         "Aquila opstart - Spinder passer": ["Indledende:", "Drej nøgle til Energen til Manuel", "Gennemgå alarmlisten", "Start kølevandssystemet i Group mode (billede 2201)", "Åben gas/ilt haner i Aquila kølerum og ved gas rampen", "Opstart anlæg:", "Vælg Group mode på alle sektioner på 2100", "Vælg Start på alle undtagen uld affald", "Tjek at blæsere/ventiler står i Auto (2100)", "Tjek opstartssekvens Step 0 er grøn (2109)", "Sætpunkt opvarmning før skorsten 130c (2106)", "Tjek Drift tilstand & Kølesystem klar (2201)", "Nulstil spædevandstællere (2201)", "Kontrol flow (Venturi:60, Top:15, Ring:45, Konus:70, Bund:100, Centralrør:60)", "Billede 2109: Vælg opvarmning", "Tjek Oxyfuel status (3001)", "Filter (2104): Start alle i Group mode", "Tjek startbetingelser step 5 (Lufo ok)", "Step 30: Udluft cykloner (2901)", "Billede 133: Tjek linesafety", "Tjek tryk på røggas køler", "AQ Chargering (2001): Group mode + Start", "Weighing: Start (Fyld sten i stenkassen)", "ACON 00500: Start tromle 1, uldløfter, blæser, forspaltevalse", "Start Cooling Water (2207)", "Tjek kammerdøre og start kammersugere", "Start indvendig tromlerens", "Afprøv omløb og snabelbakke", "Start spinder og luftringsblæser", "Bindemiddel: Dræn første væske fra buffertank 1274", "Tjek affaldsanlæg Area 1, 2, 3 og stangmølle", "Start Filter fines og Alu dosering (2136)", "Oxyfuel: Tænd 3.1 & 3.2 ved 70°C på TT4", "Step 45: Opvarmning OK (130°C ved skorsten)", "Step 71: Start Bu 23 (500Kw)", "Step 72: Start Bu 3.3 og 3.4 (300Kw)", "Step 90: Start Bu 21+22 (500Kw)", "Smeltestart:", "Start DrySoTec (2135)", "Indvælg Raw material 6 t/h", "Indstil Kw: Bu 3.1-3.4(900), 21-22(1500), 23(1800)", "Start Waste MP1 og MP2 (1 t/h hver)", "Frigiv Bu 3.3 og Returuld ved 850°C (TT 9+10)", "Fyld spinderen (billede 600)", "Manuel temperaturmåling og justering"],
         "Opstartsliste Kældermand Aquila L5": ["Rundering:", "Inspicer Smeltecyklon + Cyklon 1 + 2 (Tjek for folk)", "Luk lågen på cykloner 1 og 2", "Luk taphul med ler-prop + sifon åben", "Kontrol:", "Tappelanser klargjort", "Køling af sifon og bakker åbnet", "Luft/Ammoniak ventiler åbne", "Låge til stensilo og cykloner lukket", "Leslaw hul rengjort", "Skift dyser til tromlerens og kammerkøling", "Spinder:", "Monter blæserør, lås i gulv", "Monter stik og multi-stik på spinder", "Åben ventil SK2 Kølekappe", "Tjek tromleblæser-lanser rene/på plads", "Systemtjek:", "Start procesvandspumpe + rens filter", "Tjek luft til bobbelrør på BM buffertank", "Tjek haner under BM-tank åbne", "Skyl bindemiddel indtil friskt grønt BM fremme", "Luk bundhane og udluftning på filter", "Tjek halv varmt klapspjæld kører frit", "Åben fluidicerings-luft i penthouse", "Åben luft til varm splashbox", "Efter start:", "Hjælp smelte ud", "Runder alle etager i ovnbygning", "Tjek klapspjæld arbejder rigtigt"],
         "Kældermand rundgang": ["Tromlerens:", "1. Dyser korrekt + uld fjernet", "2. Reversering over tromlen OK", "3. Spyd til afblæsere rene", "4. Flow på afblæsere OK", "5. Rens forspaltevalse + skråplade", "6. Tromlerens pumper kører korrekt", "Tør – og Vådkælder:", "7. Vandsnegle + drænrist fri for opbygning", "8. Ingen åbne slanger eller vandspild", "9. Kælderbrønde niveau + pumper OK", "10. Cellesluser for recycling tætte", "11. Vibrationer og røg OK", "Pumperum:", "12. Filtre dagtank OK", "13. Pumper drift + tæthed OK", "Chargeringsbygning:", "14. Skippen fri for opbygning", "15. Skip grav ikke overfyldt", "16. Varme tændt (hvis frost)", "17. Båndomkast fri for opbygning", "18. Sider på vejebånd renset", "19. NaBi bigbag tjekket", "Bindemiddel bygning:", "20. Skylventil lukket + slange af", "21. Bindemiddel filtre skiftet", "Affaldsanlæg:", "22. Ingen bro-dannelse i kasseføder", "23. Følere i kassefødere korrekt", "24. Alle kasser tjekket", "25. Ingen uregelmæssigheder/spild", "Hjælpematerialer:", "26. Tjek antal tapstænger", "27. Tjek antal håndgranater", "Buffertank og BM rum:", "28. Luft til boblerør åben", "29. BM filter skiftet og udluftet", "Filter/Fordeler/Blæser-dæk:", "30. Tjek for røg, støj og støv", "31. Bånd centreret", "32. Tjek for utætheder", "33. Blæserdæk: Vibrationer OK", "34. Quench bakke fri for opbygning", "35. Leslau hul renset"],
-        "Nedfyring Aquila": [
-            "Kontrolrum:", 
-            "BM tanke overvåges (Max 500L / Min 100L)", 
-            "Vælg 'Pause' for sten og affald (Udvejning 2001) - 30 min før stop", 
-            "Ved lange stop: Tøm C11 og C12 affaldssiloer",
-            "Tap smeltecyklonen",
-            "Stop sten- og affaldsdosering når der er hul i ovnen", 
-            "Reducer Bu 21 og Bu 22 til 500Kw (når materiale er igennem)", 
-            "Reducer Oxyfuel til 300Kw (når der er flamme i udløbet)", 
-            "Start Oxyfuel brænder for at tømme gasstrengen", 
-            "Luk gashanen ved gasrampen (kølerum 2. sal) - lad køre til de går ud",
-            "Luk gashanen til BU 21+22+23 bag kontrolrummet",
-            "Sæt Oxyfuel in 'Lancing mode' (når intet flow fra taphul)", 
-            "Vælg 'Shut down' på billede 2106 (Sekvens)", 
-            "Stop DrySoTech anlæg (billede 2118)", 
-            "Stop uldløfter og forspaltevalse", 
-            "Skyl spinder igennem og stop", 
-            "Stop tromleblæser", 
-            "Stop snegle under tromle", 
-            "Stop vandsnegl", 
-            "Stop tromle og slynge (Acon sek 1)", 
-            "Stop spindersnegl", 
-            "Stop affaldsanlæg (hvis Konf kører: kun aff. transport i kælder)", 
-            "Stop Weighing, Mixing, Dosing + Utility (udsugning)", 
-            "Stop tromlerens (ind- og udvendig)", 
-            "Spinder dæk:", 
-            "Sluk for den elektriske tappelansetænder", 
-            "Træk spinder tilbage og monter blinddæksel på luftrør", 
-            "Luk for kølekappe. Demonter køling og elstik", 
-            "Spul spinder ren", 
-            "Placer slanger forsvarligt (snublefare)", 
-            "Sluk lys, radio og storskærme", 
-            "Stop møghulskøling (tjek at vandet ikke løber)", 
-            "Tjek at vand til kammerkøling ikke løber", 
-            "Kælder & Bindemiddel:", 
-            "Skyl BM-streng fra blandetank (Instruks 3.03.09)", 
-            "Skyl BM fra pumper under buffertank til ventiler i BM-rum", 
-            "Stop spinderkølingspumpe", 
-            "Luk for luft til varm splashbox ved alu-dosering", 
-            "Tjek kælderen for åbne vandslanger", 
-            "Afsluttende:", 
-            "Åben mandeluge på smeltecyklon (efter 2 timer) - aftales med rensemand", 
-            "Drej Energen-nøgle til AUTO ved Kontrolrum 6"
-        ]
+        "Nedfyring Aquila": ["Kontrolrum:", "BM tanke overvåges (Max 500L / Min 100L)", "Vælg 'Pause' for sten og affald (Udvejning 2001) - 30 min før stop", "Ved lange stop: Tøm C11 og C12 affaldssiloer", "Tap smeltecyklonen", "Stop sten- og affaldsdosering når der er hul i ovnen", "Reducer Bu 21 og Bu 22 til 500Kw (når materiale er igennem)", "Reducer Oxyfuel til 300Kw (når der er flamme i udløbet)", "Start Oxyfuel brænder for at tømme gasstrengen", "Luk gashanen ved gasrampen (kølerum 2. sal) - lad køre til de går ud", "Luk gashanen til BU 21+22+23 bag kontrolrummet", "Sæt Oxyfuel in 'Lancing mode' (når intet flow fra taphul)", "Vælg 'Shut down' på billede 2106 (Sekvens)", "Stop DrySoTech anlæg (billede 2118)", "Stop uldløfter og forspaltevalse", "Skyl spinder igennem og stop", "Stop tromleblæser", "Stop snegle under tromle", "Stop vandsnegl", "Stop tromle og slynge (Acon sek 1)", "Stop spindersnegl", "Stop affaldsanlæg (hvis Konf kører: kun aff. transport i kælder)", "Stop Weighing, Mixing, Dosing + Utility (udsugning)", "Stop tromlerens (ind- og udvendig)", "Spinder dæk:", "Sluk for den elektriske tappelansetænder", "Træk spinder tilbage og monter blinddæksel på luftrør", "Luk for kølekappe. Demonter køling og elstik", "Spul spinder ren", "Placer slanger forsvarligt (snublefare)", "Sluk lys, radio og storskærme", "Stop møghulskøling (tjek at vandet ikke løber)", "Tjek at vand til kammerkøling ikke løber", "Kælder & Bindemiddel:", "Skyl BM-streng fra blandetank (Instruks 3.03.09)", "Skyl BM fra pumper under buffertank til ventiler i BM-rum", "Stop spinderkølingspumpe", "Luk for luft til varm splashbox ved alu-dosering", "Tjek kælderen for åbne vandslanger", "Afsluttende:", "Åben mandeluge på smeltecyklon (efter 2 timer) - aftales med rensemand", "Drej Energen-nøgle til AUTO ved Kontrolrum 6"]
     };
 
     let state = { current: "", items: [], checked: [], devs: {}, devMode: false, activeIdx: null };
@@ -222,7 +181,6 @@
     const modalBody = document.getElementById('modal-body');
 
     function vib(ms = 40) { if("vibrate" in navigator) navigator.vibrate(ms); }
-
     function closeModal() { modal.style.display = 'none'; }
     function toggleMenu() { vib(); const m = document.getElementById('menuContent'); m.style.display = (m.style.display === 'block') ? 'none' : 'block'; }
     
@@ -251,33 +209,62 @@
 
     function sendFinalReport() {
         vib(100);
-        const m1 = localStorage.getItem('rock_mail1') || '';
-        const m2 = localStorage.getItem('rock_mail2') || '';
         const workNr = document.getElementById('workNr').value;
         const notes = document.getElementById('notes').value;
+        const dateStr = new Date().toLocaleDateString() + " kl. " + new Date().toLocaleTimeString();
 
-        let reportText = `CHECKLISTE RAPPORT\n--------------------------\nType: ${state.current}\nArbejdsnr: ${workNr}\nDato: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}\n\nPUNKTER:\n`;
+        const printWindow = window.open('', '_blank');
+        let itemsHtml = '';
+
         state.items.forEach((text, i) => {
-            if(text.endsWith(':')) { reportText += `\n[ ${text.toUpperCase()} ]\n`; } 
-            else {
-                const status = state.checked.includes(i) ? "[X]" : "[ ]";
-                const dev = state.devs[i] ? `\n   ⚠️ AFVIGELSE: ${state.devs[i]}` : "";
-                reportText += `${status} ${text}${dev}\n`;
+            if(text.endsWith(':')) {
+                itemsHtml += `<div style="background:#f2f2f2; padding:8px; font-weight:bold; color:#E60028; margin-top:15px; border-radius:4px; font-size:14px;">${text.toUpperCase()}</div>`;
+            } else {
+                const isChecked = state.checked.includes(i);
+                const dev = state.devs[i] ? `<div style="color:red; font-size:11px; margin-left:25px; margin-top:2px;"><strong>⚠️ AFVIGELSE:</strong> ${state.devs[i]}</div>` : '';
+                itemsHtml += `
+                    <div style="padding:6px; border-bottom:1px solid #eee; display:flex; flex-direction:column; font-size:13px;">
+                        <div style="display:flex; align-items:center;">
+                            <span style="margin-right:10px; font-family:monospace;">${isChecked ? '[X]' : '[ ]'}</span>
+                            <span>${text}</span>
+                        </div>
+                        ${dev}
+                    </div>`;
             }
         });
 
-        if(notes) reportText += `\n--------------------------\nBEMÆRKNINGER:\n${notes}\n`;
-        reportText += `\n--------------------------\nApp lavet af Lasse Gamborg`;
+        printWindow.document.write(`
+            <html>
+            <head>
+                <title>Checkliste Rapport - ${workNr}</title>
+                <style>
+                    body { font-family: "Segoe UI", sans-serif; padding: 30px; line-height: 1.4; color: #333; }
+                    .header { border-bottom: 4px solid #E60028; padding-bottom: 10px; margin-bottom: 20px; }
+                    .meta { display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 14px; background: #fafafa; padding: 10px; border-radius: 5px; }
+                    @media print { .no-print { display: none; } }
+                </style>
+            </head>
+            <body>
+                <div class="header">
+                    <h1 style="margin:0; color:#E60028; text-transform:uppercase; font-size:24px;">ROCKWOOL Rapport</h1>
+                    <div style="font-weight:bold; font-size:18px;">${state.current}</div>
+                </div>
+                <div class="meta">
+                    <div><strong>Arbejdsnummer:</strong> ${workNr}</div>
+                    <div><strong>Dato:</strong> ${dateStr}</div>
+                </div>
+                <div>${itemsHtml}</div>
+                ${notes ? `<div style="margin-top:30px; padding:15px; border:2px solid #eee; border-radius:5px; background:#fff9f9;"><strong>Bemærkninger fra operatør:</strong><br>${notes}</div>` : ''}
+                <div style="margin-top:50px; font-size:10px; color:gray; text-align:center; border-top:1px solid #eee; padding-top:10px;">Denne rapport er genereret digitalt via Aquila Checkliste App.</div>
+            </body>
+            </html>
+        `);
 
-        const recipients = [m1, m2].filter(m => m !== '').join(',');
-        const subject = encodeURIComponent(`Checkliste: ${state.current} - Arbejdsnr: ${workNr}`);
-        const body = encodeURIComponent(reportText);
-        
-        window.location.href = `mailto:${recipients}?subject=${subject}&body=${body}`;
-        
-        showGenericModal('AFSENDELSE', 'Rapporten er klargjort i din mail-app. Appen vender nu tilbage til forsiden.', () => {
-            location.reload();
-        });
+        printWindow.document.close();
+        setTimeout(() => {
+            printWindow.print();
+            showGenericModal('Rapport Færdig', 'Rapporten er genereret. Appen nulstilles nu.', () => location.reload());
+        }, 500);
     }
 
     function startApp() {
@@ -298,7 +285,7 @@
         vib(30);
         if(state.devMode) {
             state.activeIdx = i;
-            modalBody.innerHTML = `<h2 style="color:var(--rock-red);">MELD AFVIGELSE</h2><p>Beskriv fejlen herunder:</p><textarea id="devInput" rows="4" placeholder="Skriv her..."></textarea><button class="btn-red" onclick="saveDev()">Gem Afvigelse</button><button class="btn-secondary" onclick="closeModal()">ANNULLER</button>`;
+            modalBody.innerHTML = `<h2 style="color:var(--rock-red);">MELD AFVIGELSE</h2><textarea id="devInput" rows="4" placeholder="Beskriv fejlen her..."></textarea><button class="btn-red" onclick="saveDev()">Gem Afvigelse</button><button class="btn-secondary" onclick="closeModal()">ANNULLER</button>`;
             modal.style.display = 'block';
             document.getElementById('devInput').focus();
         } else {
@@ -312,9 +299,7 @@
         vib();
         const val = document.getElementById('devInput').value;
         if(val) { 
-            const now = new Date();
-            const timeStr = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
-            state.devs[state.activeIdx] = `(Kl. ${timeStr}) ${val}`;
+            state.devs[state.activeIdx] = val;
             if(!state.checked.includes(state.activeIdx)) state.checked.push(state.activeIdx); 
         }
         state.devMode = false;
@@ -325,23 +310,16 @@
     function render() {
         const activeBox = document.getElementById('activeItems'), doneBox = document.getElementById('doneItems');
         activeBox.innerHTML = ''; doneBox.innerHTML = '';
-        
         state.items.forEach((text, i) => {
             const isHeading = text.endsWith(':'), isChecked = state.checked.includes(i), dev = state.devs[i], div = document.createElement('div');
             div.className = isHeading ? 'item heading' : (isChecked ? 'item done' : 'item');
-            
             if(!isHeading) {
                 div.onclick = () => handleItemClick(i);
                 div.innerHTML = `<div class="check-box" style="${dev?'background:var(--rock-red);border-color:var(--rock-red);':''}">${dev?'!':(isChecked?'✓':'')}</div><div style="flex:1"><div>${text}</div>${dev?'<small style="color:red;font-weight:bold;">⚠️ '+dev+'</small>':''}</div>`;
                 if(isChecked) doneBox.appendChild(div); else activeBox.appendChild(div);
             } else {
-                let sectionDone = true;
-                for(let j=i+1; j<state.items.length; j++) {
-                    if(state.items[j].endsWith(':')) break;
-                    if(!state.checked.includes(j)) { sectionDone = false; break; }
-                }
                 div.innerText = text;
-                if(sectionDone) doneBox.appendChild(div); else activeBox.appendChild(div);
+                activeBox.appendChild(div);
             }
         });
         const total = state.items.filter(t => !t.endsWith(':')).length;
