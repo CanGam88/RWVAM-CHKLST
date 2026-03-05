@@ -1,4 +1,4 @@
-const cacheName = 'rockwool-v1';
+const cacheName = 'rockwool-v2';
 const assets = ['./', './index.html', './manifest.json'];
 
 // Installer filer lokalt
@@ -9,4 +9,5 @@ self.addEventListener('install', e => {
 // Hent filer fra cache hvis offline
 self.addEventListener('fetch', e => {
   e.respondWith(caches.match(e.request).then(res => res || fetch(e.request)));
+
 });
