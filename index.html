@@ -95,7 +95,6 @@
         
         footer { text-align: center; padding: 20px; color: var(--text-muted); font-size: 12px; font-weight: 600; }
 
-        /* Print-specifik CSS til rapportgenerering */
         @media print {
             header, footer, .btn-red, .btn-secondary, .btn-dev-small, #menuContent, .status-card, textarea, label, #page-home {
                 display: none !important;
@@ -241,7 +240,6 @@
                     body { font-family: "Segoe UI", sans-serif; padding: 30px; line-height: 1.4; color: #333; }
                     .header { border-bottom: 4px solid #E60028; padding-bottom: 10px; margin-bottom: 20px; }
                     .meta { display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 14px; background: #fafafa; padding: 10px; border-radius: 5px; }
-                    @media print { .no-print { display: none; } }
                 </style>
             </head>
             <body>
@@ -310,16 +308,25 @@
     function render() {
         const activeBox = document.getElementById('activeItems'), doneBox = document.getElementById('doneItems');
         activeBox.innerHTML = ''; doneBox.innerHTML = '';
+        
         state.items.forEach((text, i) => {
             const isHeading = text.endsWith(':'), isChecked = state.checked.includes(i), dev = state.devs[i], div = document.createElement('div');
             div.className = isHeading ? 'item heading' : (isChecked ? 'item done' : 'item');
+            
             if(!isHeading) {
                 div.onclick = () => handleItemClick(i);
                 div.innerHTML = `<div class="check-box" style="${dev?'background:var(--rock-red);border-color:var(--rock-red);':''}">${dev?'!':(isChecked?'✓':'')}</div><div style="flex:1"><div>${text}</div>${dev?'<small style="color:red;font-weight:bold;">⚠️ '+dev+'</small>':''}</div>`;
                 if(isChecked) doneBox.appendChild(div); else activeBox.appendChild(div);
             } else {
+                let sectionDone = true;
+                let hasItems = false;
+                for(let j = i + 1; j < state.items.length; j++) {
+                    if(state.items[j].endsWith(':')) break;
+                    hasItems = true;
+                    if(!state.checked.includes(j)) { sectionDone = false; break; }
+                }
                 div.innerText = text;
-                activeBox.appendChild(div);
+                if(hasItems && sectionDone) doneBox.appendChild(div); else activeBox.appendChild(div);
             }
         });
         const total = state.items.filter(t => !t.endsWith(':')).length;
