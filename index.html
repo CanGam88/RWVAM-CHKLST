@@ -3,11 +3,9 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"/>
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-    <meta http-equiv="Pragma" content="no-cache" />
-    <meta http-equiv="Expires" content="0" />
+    <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#E60028">
-    <title>ROCKWOOL - Varm ende checklister v2.2</title>
+    <title>ROCKWOOL - Varm ende checklister v2.3</title>
     <style>
         :root {
             --rock-red: #E60028;
@@ -152,17 +150,14 @@
     </section>
 </main>
 
-<footer>App lavet af Lasse Gamborg - V2.2</footer>
+<footer>App lavet af Lasse Gamborg - V2.3</footer>
 
 <div id="customModal" class="modal"><div class="modal-content" id="modal-body"></div></div>
 
 <script>
+    // Registrerer Service Worker med v2.3 parameter for at gennemtvinge opdatering på Android
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(function(registrations) {
-            for(let registration of registrations) {
-                registration.unregister();
-            }
-        });
+        navigator.serviceWorker.register('sw.js?v=2.3').catch(err => console.log("SW fejl:", err));
     }
 
     const RECIPIENT = "lasse.gamborg@rockwool.com";
