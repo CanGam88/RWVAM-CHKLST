@@ -3,7 +3,9 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover"/>
-    <link rel="manifest" href="manifest.json">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <meta name="theme-color" content="#E60028">
     <title>ROCKWOOL - Varm ende checklister</title>
     <style>
@@ -150,12 +152,12 @@
     </section>
 </main>
 
-<footer>App lavet af Lasse Gamborg</footer>
+<footer>App lavet af Lasse Gamborg - V2.0</footer>
 
 <div id="customModal" class="modal"><div class="modal-content" id="modal-body"></div></div>
 
 <script>
-    // Nulstil Service Worker så cachen tømmes ved opdateringer
+    // Fjern eventuelle eksisterende Service Workers for at tvinge nyeste version
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.getRegistrations().then(function(registrations) {
             for(let registration of registrations) {
@@ -189,7 +191,7 @@
             "Chargering:",
             "15. Tjek at skippen er fri for opbygning.",
             "16. Tjek at skip graven ikke er overfyldt med stenmateriale.",
-            "17. Ved frost, tjek om der er taendts for varmen.",
+            "17. Ved frost, tjek om der er taendt for varmen.",
             "18. Kontroller der ikke er opbygning i bandomkastene.",
             "19. Rens siderne pa vejebandet for opbygning.",
             "20. Kontroller at der er NaBi i bigbaggen ved Nabi doseringsanlaegget og monter en ny saek hvis den er tom.",
