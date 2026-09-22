@@ -7,7 +7,7 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <meta name="theme-color" content="#E60028">
-    <title>ROCKWOOL - Varm ende checklister</title>
+    <title>ROCKWOOL - Varm ende checklister v2.2</title>
     <style>
         :root {
             --rock-red: #E60028;
@@ -152,12 +152,11 @@
     </section>
 </main>
 
-<footer>App lavet af Lasse Gamborg - V2.0</footer>
+<footer>App lavet af Lasse Gamborg - V2.2</footer>
 
 <div id="customModal" class="modal"><div class="modal-content" id="modal-body"></div></div>
 
 <script>
-    // Fjern eventuelle eksisterende Service Workers for at tvinge nyeste version
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.getRegistrations().then(function(registrations) {
             for(let registration of registrations) {
@@ -169,8 +168,84 @@
     const RECIPIENT = "lasse.gamborg@rockwool.com";
 
     const checklists = {
-        "Aquila opstart - Spinder passer": ["Indledende:", "Drej nøgle til Energen til Manuel", "Gennemgå alarmlisten", "Start kølevandssystemet i Group mode (billede 2201)", "Åben gas/ilt haner i Aquila kølerum og ved gas rampen", "Opstart anlæg:", "Vælg Group mode på alle sektioner på 2100", "Vælg Start på alle undtagen uld affald", "Tjek at blæsere/ventiler står i Auto (2100)", "Tjek opstartssekvens Step 0 er grøn (2109)", "Sætpunkt opvarmning før skorsten 130c (2106)", "Tjek Drift tilstand & Kølesystem klar (2201)", "Nulstil spædevandstællere (2201)", "Kontrol flow (Venturi:60, Top:15, Ring:45, Konus:70, Bund:100, Centralrør:60)", "Billede 2109: Vælg opvarmning", "Tjek Oxyfuel status (3001)", "Filter (2104): Start alle i Group mode", "Tjek startbetingelser step 5 (Lufo ok)", "Step 30: Udluft cykloner (2901)", "Billede 133: Tjek linesafety", "Tjek tryk på røggas køler", "AQ Chargering (2001): Group mode + Start", "Weighing: Start (Fyld sten i stenkassen)", "ACON 00500: Start tromle 1, uldløfter, blæser, forspaltevalse", "Start Cooling Water (2207)", "Tjek kammerdøre og start kammersugere", "Start indvendig tromlerens", "Afprøv omløb og snabelbakke", "Start spinder og luftringsblæser", "Bindemiddel: Dræn første væske fra buffertank 1274", "Tjek affaldsanlæg Area 1, 2, 3 og stangmølle", "Start Filter fines og Alu dosering (2136)", "Oxyfuel: Tænd 3.1 & 3.2 ved 70°C på TT4", "Step 45: Opvarmning OK (130°C ved skorsten)", "Step 71: Start Bu 23 (500Kw)", "Step 72: Start Bu 3.3 og 3.4 (300Kw)", "Step 90: Start Bu 21+22 (500Kw)", "Smeltestart:", "Start DrySoTec (2135)", "Indvælg Raw material 6 t/h", "Indstil Kw: Bu 3.1-3.4(900), 21-22(1500), 23(1800)", "Start Waste MP1 og MP2 (1 t/h hver)", "Frigiv Bu 3.3 og Returuld ved 850°C (TT 9+10)", "Fyld spinderen (billede 600)", "Manuel temperaturmåling og justering"],
-        "Opstartsliste Kældermand Aquila L5": ["Rundering:", "Inspicer Smeltecyklon + Cyklon 1 + 2 (Tjek for folk)", "Luk lågen på cykloner 1 og 2", "Luk taphul med ler-prop + sifon åben", "Kontrol:", "Tappelanser klargjort", "Køling af sifon og bakker åbnet", "Luft/Ammoniak ventiler åbne", "Låge til stensilo og cykloner lukket", "Leslaw hul rengjort", "Skift dyser til tromlerens og kammerkøling", "Spinder:", "Monter blæserør, lås i gulv", "Monter stik og multi-stik på spinder", "Åben ventil SK2 Kølekappe", "Tjek tromleblæser-lanser rene/på plads", "Systemtjek:", "Start procesvandspumpe + rens filter", "Tjek luft til bobbelrør på BM buffertank", "Tjek haner under BM-tank åbne", "Skyl bindemiddel indtil friskt grønt BM fremme", "Luk bundhane og udluftning på filter", "Tjek halv varmt klapspjæld kører frit", "Åben fluidicerings-luft i penthouse", "Åben luft til varm splashbox", "Efter start:", "Hjælp smelte ud", "Runder alle etager i ovnbygning", "Tjek klapspjæld arbejder rigtigt"],
+        "Aquila opstart - Spinder passer": [
+            "Indledende:", 
+            "Drej nøgle til Energen til Manuel", 
+            "Gennemgå alarmlisten", 
+            "Start kølevandssystemet i Group mode (billede 2201)", 
+            "Åben gas/ilt haner i Aquila kølerum og ved gas rampen", 
+            "Opstart anlæg:", 
+            "Vælg Group mode på alle sektioner på 2100", 
+            "Vælg Start på alle undtagen uld affald", 
+            "Tjek at blæsere/ventiler står i Auto (2100)", 
+            "Tjek opstartssekvens Step 0 er grøn (2109)", 
+            "Sætpunkt opvarmning før skorsten 130c (2106)", 
+            "Tjek Drift tilstand & Kølesystem klar (2201)", 
+            "Nulstil spædevandstællere (2201)", 
+            "Kontrol flow (Venturi:60, Top:15, Ring:45, Konus:70, Bund:100, Centralrør:60)", 
+            "Billede 2109: Vælg opvarmning", 
+            "Tjek Oxyfuel status (3001)", 
+            "Filter (2104): Start alle i Group mode", 
+            "Tjek startbetingelser step 5 (Lufo ok)", 
+            "Step 30: Udluft cykloner (2901)", 
+            "Billede 133: Tjek linesafety", 
+            "Tjek tryk på røggas køler", 
+            "AQ Chargering (2001): Group mode + Start", 
+            "Weighing: Start (Fyld sten i stenkassen)", 
+            "ACON 00500: Start tromle 1, uldløfter, blæser, forspaltevalse", 
+            "Start Cooling Water (2207)", 
+            "Tjek kammerdøre og start kammersugere", 
+            "Start indvendig tromlerens", 
+            "Afprøv omløb og snabelbakke", 
+            "Start spinder og luftringsblæser", 
+            "Bindemiddel: Dræn første væske fra buffertank 1274", 
+            "Tjek affaldsanlæg Area 1, 2, 3 og stangmølle", 
+            "Start Filter fines og Alu dosering (2136)", 
+            "Oxyfuel: Tænd 3.1 & 3.2 ved 70°C på TT4", 
+            "Step 45: Opvarmning OK (130°C ved skorsten)", 
+            "Step 71: Start Bu 23 (500Kw)", 
+            "Step 72: Start Bu 3.3 og 3.4 (300Kw)", 
+            "Step 90: Start Bu 21+22 (500Kw)", 
+            "Smeltestart:", 
+            "Start DrySoTec (2135)", 
+            "Indvælg Raw material 6 t/h", 
+            "Indstil Kw: Bu 3.1-3.4(900), 21-22(1500), 23(1800)", 
+            "Start Waste MP1 og MP2 (1 t/h hver)", 
+            "Frigiv Bu 3.3 og Returuld ved 850°C (TT 9+10)", 
+            "Fyld spinderen (billede 600)", 
+            "Manuel temperaturmåling og justering"
+        ],
+        "Opstartsliste Kældermand Aquila L5": [
+            "Rundering:", 
+            "Inspicer Smeltecyklon + Cyklon 1 + 2 (Tjek for folk)", 
+            "Luk lågen på cykloner 1 og 2", 
+            "Luk taphul med ler-prop + sifon åben", 
+            "Kontrol:", 
+            "Tappelanser klargjort", 
+            "Køling af sifon og bakker åbnet", 
+            "Luft/Ammoniak ventiler åbne", 
+            "Låge til stensilo og cykloner lukket", 
+            "Leslaw hul rengjort", 
+            "Skift dyser til tromlerens og kammerkøling", 
+            "Spinder:", 
+            "Monter blæserør, lås i gulv", 
+            "Monter stik og multi-stik på spinder", 
+            "Åben ventil SK2 Kølekappe", 
+            "Tjek tromleblæser-lanser rene/på plads", 
+            "Systemtjek:", 
+            "Start procesvandspumpe + rens filter", 
+            "Tjek luft til bobbelrør på BM buffertank", 
+            "Tjek haner under BM-tank åbne", 
+            "Skyl bindemiddel indtil friskt grønt BM fremme", 
+            "Luk bundhane og udluftning på filter", 
+            "Tjek halv varmt klapspjæld kører frit", 
+            "Åben fluidicerings-luft i penthouse", 
+            "Åben luft til varm splashbox", 
+            "Efter start:", 
+            "Hjælp smelte ud", 
+            "Runder alle etager i ovnbygning", 
+            "Tjek klapspjæld arbejder rigtigt"
+        ],
         "Kældermand rundgang": [
             "Tromlerens:",
             "1. Kontroller at dyserne sprojter korrekt, og at der ikke er uld ved udvendige dyser.",
@@ -237,7 +312,50 @@
             "Maling af bundtemperatur:",
             "49. Minimum 2 x maling pr. vagt (alle vagter). Maling indtastes i Excel skema."
         ],
-        "Nedfyring Aquila": ["Kontrolrum:", "BM tanke overvåges (Max 500L / Min 100L)", "Vælg 'Pause' for sten og affald (Udvejning 2001) - 30 min før stop", "Ved lange stop: Tøm C11 og C12 affaldssiloer", "Tap smeltecyklonen", "Stop sten- og affaldsdosering når der er hul i ovnen", "Reducer Bu 21 og Bu 22 til 500Kw (når materiale er igennem)", "Reducer Oxyfuel til 300Kw (når der er flamme i udløbet)", "Start Oxyfuel brænder for at tømme gasstrengen", "Luk gashanen ved gasrampen (kølerum 2. sal) - lad køre til de går ud", "Luk gashanen til BU 21+22+23 bag kontrolrummet", "Sæt Oxyfuel in 'Lancing mode' (når intet flow fra taphul)", "Vælg 'Shut down' på billede 2106 (Sekvens)", "Stop DrySoTech anlæg (billede 2118)", "Stop uldløfter og forspaltevalse", "Skyl spinder igennem og stop", "Stop tromleblæser", "Stop snegle under tromle", "Stop vandsnegl", "Stop tromle og slynge (Acon sek 1)", "Stop spindersnegl", "Stop affaldsanlæg (hvis Konf kører: kun aff. transport i kælder)", "Stop Weighing, Mixing, Dosing + Utility (udsugning)", "Stop tromlerens (ind- og udvendig)", "Spinder dæk:", "Sluk for den elektriske tappelansetænder", "Træk spinder tilbage og monter blinddæksel på luftrør", "Luk for kølekappe. Demonter køling og elstik", "Spul spinder ren", "Placer slanger forsvarligt (snublefare)", "Sluk lys, radio og storskærme", "Stop møghulskøling (tjek at vandet ikke løber)", "Tjek at vand til kammerkøling ikke løber", "Kælder & Bindemiddel:", "Skyl BM-streng fra blandetank (Instruks 3.03.09)", "Skyl BM fra pumper under buffertank til ventiler i BM-rum", "Stop spinderkølingspumpe", "Luk for luft til varm splashbox ved alu-dosering", "Tjek kælderen for åbne vandslanger", "Afsluttende:", "Åben mandeluge på smeltecyklon (efter 2 timer) - aftales med rensemand", "Drej Energen-nøgle til AUTO ved Kontrolrum 6"]
+        "Nedfyring Aquila": [
+            "Kontrolrum:", 
+            "BM tanke overvåges (Max 500L / Min 100L)", 
+            "Vælg 'Pause' for sten og affald (Udvejning 2001) - 30 min før stop", 
+            "Ved lange stop: Tøm C11 og C12 affaldssiloer", 
+            "Tap smeltecyklonen", 
+            "Stop sten- og affaldsdosering når der er hul i ovnen", 
+            "Reducer Bu 21 og Bu 22 til 500Kw (når materiale er igennem)", 
+            "Reducer Oxyfuel til 300Kw (når der er flamme i udløbet)", 
+            "Start Oxyfuel brænder for at tømme gasstrengen", 
+            "Luk gashanen ved gasrampen (kølerum 2. sal) - lad køre til de går ud", 
+            "Luk gashanen til BU 21+22+23 bag kontrolrummet", 
+            "Sæt Oxyfuel in 'Lancing mode' (når intet flow fra taphul)", 
+            "Vælg 'Shut down' på billede 2106 (Sekvens)", 
+            "Stop DrySoTech anlæg (billede 2118)", 
+            "Stop uldløfter og forspaltevalse", 
+            "Skyl spinder igennem og stop", 
+            "Stop tromleblæser", 
+            "Stop snegle under tromle", 
+            "Stop vandsnegl", 
+            "Stop tromle og slynge (Acon sek 1)", 
+            "Stop spindersnegl", 
+            "Stop affaldsanlæg (hvis Konf kører: kun aff. transport i kælder)", 
+            "Stop Weighing, Mixing, Dosing + Utility (udsugning)", 
+            "Stop tromlerens (ind- og udvendig)", 
+            "Spinder dæk:", 
+            "Sluk for den elektriske tappelansetænder", 
+            "Træk spinder tilbage og monter blinddæksel på luftrør", 
+            "Luk for kølekappe. Demonter køling og elstik", 
+            "Spul spinder ren", 
+            "Placer slanger forsvarligt (snublefare)", 
+            "Sluk lys, radio og storskærme", 
+            "Stop møghulskøling (tjek at vandet ikke løber)", 
+            "Tjek at vand til kammerkøling ikke løber", 
+            "Kælder & Bindemiddel:", 
+            "Skyl BM-streng fra blandetank (Instruks 3.03.09)", 
+            "Skyl BM fra pumper under buffertank til ventiler i BM-rum", 
+            "Stop spinderkølingspumpe", 
+            "Luk for luft til varm splashbox ved alu-dosering", 
+            "Tjek kælderen for åbne vandslanger", 
+            "Afsluttende:", 
+            "Åben mandeluge på smeltecyklon (efter 2 timer) - aftales med rensemand", 
+            "Drej Energen-nøgle til AUTO ved Kontrolrum 6"
+        ]
     };
 
     let state = { current: "", items: [], checked: [], devs: {}, devMode: false, activeIdx: null };
