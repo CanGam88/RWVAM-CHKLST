@@ -155,8 +155,13 @@
 <div id="customModal" class="modal"><div class="modal-content" id="modal-body"></div></div>
 
 <script>
+    // Nulstil Service Worker så cachen tømmes ved opdateringer
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').catch(err => console.log("SW fejl:", err));
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+            for(let registration of registrations) {
+                registration.unregister();
+            }
+        });
     }
 
     const RECIPIENT = "lasse.gamborg@rockwool.com";
